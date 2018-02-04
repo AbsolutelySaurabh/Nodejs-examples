@@ -1,29 +1,20 @@
-//here we have imported the node module
-var rect = require('./rectangle');
+const http = require('http');
 
-function solveRect(l, b){
-	console.log("Solving for rectangle with l = " + l +" and b = " + b);
-	
-	rect(l, b, (err, rectangle) => {
+const hostname = 'localhost';
+const port = 3000;
 
-		if(err){
-			console.log("ERROR: ", err.message);
-		}else{
-			
-			console.log("The area of the rectangle of dimensions l = "
-				+ l + " and b = " + b + " is: " + rectangle.area());
-			//in the abobe we do not need to give parameters is area() as it'll auto take from above method via callback
-			//in javascript due to callback the inner methos has accesss to all the variables of the outer method.
+const server = http.createServer((req, res) => {
 
-			console.log("The perimeter of the rectangle of dimensions l = "
-				+ l + " and b = " + b + " is: " + rectangle.perimeter());
-			
-		}
-	});
+	console.log(req.headers);
 
-	console.log("This statement is after the call to rect().");
+	//means everthing OK
+	res.statusCode = 200;
+	res.setHeader('Content-Type', 'text/html');
+	res.end('<html><body><h1>Hello, World!</h1></body></html>');
 
-}
+})
 
-solveRect(2, 3);
-solveRect(4, 5);
+//start server
+server.listen(port, hostname, () => {
+	console.log(`Server running at http://${hostname}:${port}`);
+});
