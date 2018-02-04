@@ -1,11 +1,21 @@
 const express = require('express');
 const http = require('http');
 
+//making use of morgan , helps in seeing the log files
+const morgan = require('morgan');
+
 const hostname = 'localhost';
 const port = 3000;
 
-//this states that the applicai
+//this states that the application uses express
 const app = express();
+app.use(morgan('dev'));
+
+//setting up the server to sunup the html files
+//after installing morgan
+//__dirname says the morgan to lookup public in root project folder
+//using morgan we can directly MAKE USE OF THE HTML FILES DECLARED IN PUBLIC FOLDER.
+app.use(express.static(__dirname + '/public'));
 
 //the next is used when we need to invoke additional middleware, will learn further
 app.use((req, res, next) => {
@@ -13,7 +23,7 @@ app.use((req, res, next) => {
 	console.log(req.headers);
 	res.statusCode = 200;
 	res.setHeader('Content-Type', 'text/html');
-	res.end('<html><body><h1>This is an express server</h1></body></html>');
+	res.end('<html><body><h1>This is an express server.</h1></body></html>');
 
 });
 
