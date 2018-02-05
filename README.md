@@ -7,6 +7,6 @@ Guide by branch name:
 2. node-express: 
                a. node-express,
                b. node-express-morgan( used for adding static html files, using express to server.),
-               c. express-router: helps in organising express application via application routes, some are app.get(),                             app.all(), app.delete(), app.post(): needed fot CREATE, app.put(): needed for UPDATE.
+               c. express-router: helps in organising express application via application routes, especially needed when we need to support large number of API endpoints, some are app.get(),app.all(), app.delete(), app.post(): needed fot CREATE, app.put(): needed for UPDATE.
 
 
