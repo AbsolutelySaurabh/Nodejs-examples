@@ -7,6 +7,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
 const dishRouter = require('./routes/dishRouter');
+const leaderRouter = require('./routes/leaderRouter');
+const promoRouter = require('./routes/promoRouter');
 
 const hostname = 'localhost';
 const port = 3000;
@@ -19,7 +21,9 @@ app.use(bodyParser.json());
 
 //mounting the dshRouter
 app.use('/dishes', dishRouter);
-app.use('/dishes/:dishId', dishRouter);
+app.use('/leader', leaderRouter);
+app.use('/promos', promoRouter);
+
 //setting up the server to sunup the html files
 //after installing morgan
 //__dirname says the morgan to lookup public in root project folder

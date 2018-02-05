@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 
 const dishRouter = express.Router();
 
@@ -29,6 +28,11 @@ dishRouter.route('/')
 // const dishRouter_id = express.Router();
 // //for disheId
 dishRouter.route('/:dishId')
+.all((req,res,next) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    next();
+})
 .get((req, res, next) => {
 
 	//the next will cause to call it
