@@ -1,51 +1,46 @@
-const express = require('express');
-const http = require('http');
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
 
-//making use of morgan , helps in seeing the log files
-const morgan = require('morgan');
-//node router
-const bodyParser = require('body-parser');
+//the databse conFusion we created earlier via terminal
+const url = 'mongodb://localhost:27017/conFusion';
 
-const dishRouter = require('./routes/dishRouter');
-const leaderRouter = require('./routes/leaderRouter');
-const promoRouter = require('./routes/promoRouter');
+MongoClient.connect(url, (err, db) => {
 
-const hostname = 'localhost';
-const port = 3000;
+	//the assert will check that if the "err" is null or not.
+	assert.equal(err, null);
 
-//this states that the application uses express
-const app = express();
-//whenever we need to use MIDDLEWARE, use app.use()
-app.use(morgan('dev'));
-app.use(bodyParser.json());
+	console.log("Connected correctly to the server.");
 
-//mounting the dshRouter
-app.use('/dishes', dishRouter);
-app.use('/leader', leaderRouter);
-app.use('/promos', promoRouter);
+	//we created dishes collection previously
+	const collection = db.collection("dishes");
+	//inserting one object in collectiom dishes
+	collection.insertOne({"name": "Saurabh Singh", "description": "student"}, (err, result) => {
 
-//setting up the server to sunup the html files
-//after installing morgan
-//__dirname says the morgan to lookup public in root project folder
-//using morgan we can directly MAKE USE OF THE HTML FILES DECLARED IN PUBLIC FOLDER.
-app.use(express.static(__dirname + '/public'));
+			//there is nestin of calls
 
-//the next is used when we need to invoke additional middleware, will learn further
-app.use((req, res, next) => {
+			assert.equal(err, null);
 
-	console.log(req.headers);
-	res.statusCode = 200;
-	res.setHeader('Content-Type', 'text/html');
-	res.end('<html><body><h1>This is an express server.</h1></body></html>');
+			console.log("After Insert:\n");
+			//ops tells how many operations have been succesful
+			console.log(result.ops);
 
-});
+			//empty will search for evrthing 
+			collection.find({}).toArray((err, docs) => {
 
-//set up 
-const server = http.createServer(app);
+				assert.equal(err, null);
 
-server.listen(port, hostname, () => {
+				console.log("Found:\n");
+				//docs will return all the docs from the collection mathcing find
+				//we can apply filter here too.
+				console.log(docs);
 
-	console.log(`Server runnign at http://${hostname}:${port}`);
+				//removing collections
+				db.dropCollection("dishes", (err, result) => {
 
+					assert.equal(err, null);
+					db.close();
+				});
+			});
 
+		});
 });
