@@ -8,5 +8,8 @@ Guide by branch name:
                a. node-express,
                b. node-express-morgan( used for adding static html files, using express to server.),
                c. express-router: helps in organising express application via application routes, especially needed when we need to support large number of API endpoints, some are app.get(),app.all(), app.delete(), app.post(): needed fot CREATE, app.put(): needed for UPDATE.
-
+               
+3. node-mongo: 
+              a. node-mongoDB examples/ setting up mongoDB with nodejs
+              b. callback hell and promises( provides much cleaner code, and using promises helps to avoid the pyramdical    structures call back hell).
 
