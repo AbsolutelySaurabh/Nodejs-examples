@@ -3,6 +3,31 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
+const commentSchema = new Schema({
+
+	rating: {
+		type: String,
+		min:1,
+		max: 5,
+		required: true
+	},
+
+	comment: {
+		type: String,
+		required: true
+	},
+
+	author: {
+
+		type: String,
+		required: true
+	}
+
+}, {
+	timestamps: true
+});
+
+
 const dishSchema = new Schema({
 
 	name: {
@@ -16,7 +41,10 @@ const dishSchema = new Schema({
 
 		type: String,
 		required: true
-	}
+	},
+
+	comments: [commentSchema]
+	
 },{
 	//this will automaticalle create upDated at:, and createdAt timestamps
 	//this was provided by mongoose only.

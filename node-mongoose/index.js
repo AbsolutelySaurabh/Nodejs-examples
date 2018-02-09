@@ -16,22 +16,46 @@ connect.then((db) => {
 	//when connection is istablished
 	console.log('Connected to server correctly');
 
-	var newDish = Dishes({
+	Dishes.create({
 
-		name: 'Daal',
+		name: 'Mozeralla',
 		description: 'text'
-	});
+	})
 
-	newDish.save().then((dish) => {
+	.then((dish) => {
 
 		console.log(dish);
 
-		return Dishes.find({}).exec();
-	})
-	.then((dishes) => {
-		//when I get the dishes
-		console.log(dishes);
+		return Dishes.findByIdAndUpdate(dish._id, {
 
+			$set: { description: 'Updated dish'}
+		},{
+			//once upadets it'll return in next step
+			new: true
+		})
+		.exec();
+	})
+	//aftre the above methos this will get executed
+	//the above will return a dish
+	.then((dish) => {
+		//when I get the dishes
+		console.log(dish);
+
+		//inserta comment
+		dish.comments.push({
+
+			rating: 5,
+			comment: 'enjoyed the dish.',
+			author: "Rahul Khandelwal"
+		});
+
+		return dish.save();
+	})
+	//aftre the above methos this will get executed
+	//the above will return a dish
+	.then(dish => {
+
+		console.log(dish);
 		return db.collection('dishes').drop();
 
 	})
