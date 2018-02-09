@@ -12,4 +12,8 @@ Guide by branch name:
 3. node-mongo: 
               a. node-mongoDB examples/ setting up mongoDB with nodejs
               b. callback hell and promises( provides much cleaner code, and using promises helps to avoid the pyramdical    structures call back hell).
+              
+4. node-mongoose:
+              mongoose allows us to provide sturuted schema to our documents, we call it mongoose ODM or Object Data Mapping.
+              a.mongoose-example-1: getting started with schemas and using 'bluebird' as a third-party promise node-mdule.
 
