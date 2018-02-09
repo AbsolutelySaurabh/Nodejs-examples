@@ -1,48 +1,68 @@
-const mongoose = require('mongoose');
-//bluebird is a 3rd party promise module of nodejs
-mongoose.Promise = require('bluebird');
+const http = require('http');
 
-const Dishes = require('./models/dishes');
+//fs is filesyatem, allows reading and writing files
+const fs = require('fs');
+//path helps to specify path
+const path = require('path');
 
-const url = 'mongodb://localhost:27017/conFusion';
-const connect = mongoose.connect(url, {
+const hostname = 'localhost';
+const port = 3000;
 
-	//this will encourage Mongo to use the MOngoDB driver to connect
-	useMongoClient: true
-});
+const server = http.createServer((req, res) => {
 
-connect.then((db) => {
+	console.log("Request for " + req.url + ' by method ' + req.method);
+	if(req.method == 'GET'){
 
-	//when connection is istablished
-	console.log('Connected to server correctly');
+		var fileUrl;
+		if(req.url == '/'){
+			fileUrl = '/index.html';
+		}else{
+			fileUrl = req.url;
+		}
 
-	var newDish = Dishes({
+		var filePath = path.resolve('./public' + fileUrl);
 
-		name: 'Daal',
-		description: 'text'
-	});
+		//not we have to make sure that the file name extension is .html
+		const fileExt = path.extname(filePath);
+		if(fileExt == '.html'){
+			fs.exists(filePath, (exists) => {
 
-	newDish.save().then((dish) => {
+				if(!exists){
+					res.statusCode = 404;
+					res.setHeader('Content-Type', 'text/html');
+					res.end('<html><body><h1>Error 404: ' + fileUrl + 'not found</h1></body></html>');
 
-		console.log(dish);
+					return;
+				}else{
 
-		return Dishes.find({}).exec();
-	})
-	.then((dishes) => {
-		//when I get the dishes
-		console.log(dishes);
+					res.statusCode = 200;
+					res.setHeader('Content-Type', 'text/html');
 
-		return db.collection('dishes').drop();
+					//need to read the file and send it
+					fs.createReadStream(filePath).pipe(res);
+				}
+			})
+		}else{
 
-	})
-	.then(() => {
-		return db.close();
-	})
+			//if file extension is not html;
+		   res.statusCode = 404;
+		   res.setHeader('Content-Type', 'text/html');		
+		   res.end('<html><body><h1>Error 404: ' + fileUrl + 'Its not an html file.</h1></body></html>');
+		   return;
+		}
 
-	//catch any error
-	.catch((err) => {
+	}else{
 
-		console.log(err);
-	});
+	       //if file extension is not html;
+		   res.statusCode = 404;
+		   res.setHeader('Content-Type', 'text/html');		
+		   res.end('<html><body><h1>Error 404: ' + req.method + ' is not supported.</h1></body></html>');
+		   return;
+	}
 
+}) 
+
+//start server
+server.listen(port, hostname, () => {
+	console.log(`Server running at http://${hostname}:${port}`);
 });

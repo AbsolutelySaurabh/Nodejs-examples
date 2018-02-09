@@ -1,16 +1,12 @@
 {
-  "name": "node-mongoose",
+  "name": "node-http",
   "version": "1.0.0",
-  "description": "node mongoose ODM example",
+  "description": "Node http module example",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index"
   },
-  "author": "saurabh singh",
-  "license": "ISC",
-  "dependencies": {
-    "bluebird": "^3.5.0",
-    "mongoose": "^4.11.12"
-  }
+  "author": "Saurabh Singh",
+  "license": "ISC"
 }
