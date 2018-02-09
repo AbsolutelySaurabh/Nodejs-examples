@@ -1,16 +1,16 @@
 {
-  "name": "node-mongo",
+  "name": "node-mongoose",
   "version": "1.0.0",
-  "description": "Node MongoDB example",
+  "description": "node mongoose ODM example",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index"
   },
-  "author": "Saurabh Singh",
+  "author": "saurabh singh",
   "license": "ISC",
   "dependencies": {
-    "assert": "^1.4.1",
-    "mongodb": "^2.2.33"
+    "bluebird": "^3.5.0",
+    "mongoose": "^4.11.12"
   }
 }
