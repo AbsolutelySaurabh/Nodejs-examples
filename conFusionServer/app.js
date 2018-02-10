@@ -27,7 +27,6 @@ connect.then(db => {
 
 }, (err) => {
 	console.log(err);
-
 });
 
 
@@ -50,7 +49,10 @@ app.use('/users', users);
 app.use('/dishes', dishRouter);
 app.use('/leaders', leaderRouter);
 app.use('/promos', promoRouter);
+
+app.use('/dishes/:dishId/comments', dishRouter);
 app.use('/dishes/:dishId', dishRouter);
+app.use('/dishes/:dishId/comments/:commentId', dishRouter);
 app.use('/leaders/:leaderId', leaderRouter);
 app.use('/promos/:promoId', promoRouter);
 
