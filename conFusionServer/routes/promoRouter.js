@@ -1,59 +1,64 @@
-const express = require('express');
+var express = require('express');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
-const promoRouter = express.Router();
+var Promotions = require('../models/promotions');
+
+var promoRouter = express.Router();
+promoRouter.use(bodyParser.json());
 
 promoRouter.route('/')
-.all((req, res, next) => {
+    .get(function (req, res, next) {
+        Promotions.find({}, function (err, promo) {
+            if (err) throw err;
+            res.json(promo);
+        });
+    })
 
-	res.statusCode = 200;
-	res.setHeader('Content-Type', 'text/plain');
-	next();
-})
-.get((req, res, next) => {
-	res.end('Will provide details of all the promos to you.');
-})
-.post((req, res, next) => {
+    .post(function (req, res, next) {
+        Promotions.create(req.body, function (err, promo) {
+            if (err) throw err;
+            console.log('Promotion created!');
+            var id = promo._id;
 
-	res.end('Will add the promos: ' + req.body.name + ' with details: ' + req.body.description);
-})
-//UPDATE
-.put((req, res, next) => {
-	res.statusCode = 403;
-	res.end('PUT operation is not supported on /promo');
-})
-.delete((req, res, next) => {
-	res.end('Deleting all the promos.');
-});
+            res.writeHead(200, {
+                'Content-Type': 'text/plain'
+            });
+            res.end('Added the promotion with id: ' + id);
+        });
+    })
 
+    .delete(function (req, res, next) {
+        Promotions.remove({}, function (err, resp) {
+            if (err) throw err;
+            res.json(resp);
+        });
+    });
 
-//with Id
 promoRouter.route('/:promoId')
-.all((req,res,next) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    next();
-})
-.get((req, res, next) => {
+    .get(function (req, res, next) {
+        Promotions.findById(req.params.promoId, function (err, promo) {
+            if (err) throw err;
+            res.json(promo);
+        });
+    })
 
-	//the next will cause to call it
-	res.end('Will send the details of the promo: ' + req.params.promoId + ' to you!');
-})
-//CREATE
-//the req.body.name came from the jsonPrser.body() method
-.post((req, res, next) => {
-	res.statusCode = 403;
-	res.end('POST operation not supported on /promo/ '+ req.params.promoId);
-})
-//UPDATE
-.put((req, res, next) => {
+    .put(function (req, res, next) {
+        Promotions.findByIdAndUpdate(req.params.promoId, {
+            $set: req.body
+        }, {
+            new: true
+        }, function (err, promo) {
+            if (err) throw err;
+            res.json(promo);
+        });
+    })
 
-	req.write('Updating the promo: ' + req.params.promoId + '\n');
-	res.end('Will update the promo: ' + req.body.name + 'with details: ' + req.body.description);
-})
-.delete((req, res, next) => {
-	//the next will cause to call it
-	res.end('Deleting promo: ' + req.params.promoId);
-});
+    .delete(function (req, res, next) {
+        Promotions.findByIdAndRemove(req.params.promoId, function (err, resp) {
+            if (err) throw err;
+            res.json(resp);
+        });
+    });
 
-//exporting this router
 module.exports = promoRouter;
