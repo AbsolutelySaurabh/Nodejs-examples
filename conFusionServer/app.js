@@ -45,41 +45,32 @@ app.use(cookieParser());
 
 //We want to do AUTH right before the queries onf our data
 
-function auth(req, res, next){
-
+function auth (req, res, next) {
   console.log(req.headers);
   var authHeader = req.headers.authorization;
-  if(!authHeader){
-
-    var err = new Error('You are not authenticated!');
-    res.setHeader('WWW-Authenticated', 'Basic');
-    //not valid user error
-    err.status = 401;
-    return next(err);
+  if (!authHeader) {
+      var err = new Error('You are not authenticated!');
+      res.setHeader('WWW-Authenticate', 'Basic');
+      err.status = 401;
+      next(err);
+      return;
   }
 
   var auth = new Buffer(authHeader.split(' ')[1], 'base64').toString().split(':');
-
-  var username = auth[0];
-  var password = auth[1];
-
-  if(username == 'admin' && password == 'paddword'){
-    //allow
-    //it means that fronm auth it'll pass to the next middleware
-    //and express with match the suitable search
-    next();
-  }else{
-
-    //error
-     var err = new Error('You are not authenticated!');
-    res.setHeader('WWW-Authenticated', 'Basic');
-    //not valid user error
-    err.status = 401;
-    return next(err);
+  var user = auth[0];
+  var pass = auth[1];
+  if (user == 'admin' && pass == 'password') {
+      next(); // authorized
+  } else {
+      var err = new Error('You are not authenticated!');
+      res.setHeader('WWW-Authenticate', 'Basic');      
+      err.status = 401;
+      next(err);
   }
 }
 
 app.use(auth);
+
 
 //this enables us to serve statc data from public folder.
 app.use(express.static(path.join(__dirname, 'public')));
